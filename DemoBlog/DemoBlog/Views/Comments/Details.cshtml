@@ -1,0 +1,37 @@
+﻿@model DemoBlog.Models.Comment
+
+@{
+    ViewBag.Title = "Details Comment";
+    var toPost = Model.PostComm.Id;
+}
+
+<div>
+    <h2>Details Comment</h2>
+</div>
+
+<hr />
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Body)
+        </dt>
+        <dd>
+            @MvcHtmlString.Create(Model.Body)
+            @*@Html.DisplayFor(model => model.Body)*@
+        </dd>
+    </dl>
+</div>
+
+<hr />
+
+@if (User.IsInRole ("Administrators") || (Model.Author != null && Model.Author.UserName == User.Identity.Name)) {
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-sm" })
+}
+@Html.ActionLink("Back to Post", "Details", "Posts", new { id = toPost }, new { @class = "btn btn-default btn-sm" })

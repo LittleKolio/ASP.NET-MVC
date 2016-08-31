@@ -1,0 +1,71 @@
+﻿@model List<DemoBlog.Models.Comment>
+
+@{
+    Layout = null;
+}
+
+<div>
+    <h2>Comments</h2>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(m => Model.First().Author)
+        </th>
+        <th class="bor">
+            @Html.DisplayNameFor(m => Model.First().Body) / 
+            @Html.DisplayNameFor(m => Model.First().Date)
+        </th>
+        <th>
+            Options
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    @*<tr>
+        @Html.Raw(Json.Encode (item))
+    </tr>*@
+    <tr>
+        <td class="col-md-2">
+            @{
+                string imgSrc = null;
+                if (item.Author.Img != null) {
+                    var base64 = Convert.ToBase64String (item.Author.Img);
+                    imgSrc = String.Format ("data:image/gif;base64,{0}", base64);
+                }
+            }
+            @Html.DisplayFor(modelItem => item.Author.FullName)
+            <div class="col-md-10">
+                <div class="thumbnail">
+                    <img src=@imgSrc alt="...">
+                </div>
+            </div>
+        </td>
+        <td class="bor">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(m => item.Date)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(m => item.Date)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(m => item.Body)
+                </dt>
+                <dd>
+                    @MvcHtmlString.Create(item.Body)
+                    @*@Html.DisplayFor(modelItem => item.Body)*@
+                </dd>
+            </dl>
+        </td>
+        <td>
+            @if (User.IsInRole ("Administrators") || (item.Author != null && item.Author.UserName == User.Identity.Name)) {
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default btn-sm op-btn" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default btn-sm op-btn" })
+            }
+            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-default btn-sm" })
+        </td>
+    </tr>
+}
+</table>

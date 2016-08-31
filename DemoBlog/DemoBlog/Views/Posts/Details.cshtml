@@ -1,0 +1,60 @@
+﻿@model DemoBlog.Models.Post
+
+@{
+    ViewBag.Title = "Post Details";
+}
+
+<div>
+    <h2>Post Details</h2>
+</div>
+
+@*@Html.Raw(Json.Encode(Model))*@
+
+<hr/>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Author)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Author.FullName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Body)
+        </dt>
+        <dd>
+            @MvcHtmlString.Create(Model.Body)
+            @*@Html.DisplayFor(model => model.Body)*@
+        </dd>
+    </dl>
+</div>
+
+<hr/>
+
+@Html.ActionLink("Create Comment", "Create", "Comments", new { id = Model.Id }, new { @class = "btn btn-default btn-sm" })
+
+@if (User.IsInRole ("Administrators") || (Model.Author != null && Model.Author.UserName == User.Identity.Name)) {
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-sm" })
+        @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-default btn-sm" })
+    </td>
+}
+
+@Html.ActionLink("Back to List", "Index", "Posts", new { id = Model.Id }, new { @class = "btn btn-default btn-sm" })
+
+<hr />
+
+@Html.Action("Index", "Comments", new { id = Model.Id })

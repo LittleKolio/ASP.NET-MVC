@@ -1,0 +1,46 @@
+﻿@model List<DemoBlog.Models.Post>
+
+@{
+    ViewBag.Title = "Demo Blog";
+}
+
+<div class="jumbotron alert">
+    <h1>Demo Blog</h1>
+</div>
+
+<section class="row">
+    @foreach (var item in Model) {
+        string imgSrc = null;
+        if (item.Author.Img != null) {
+            var base64 = Convert.ToBase64String (item.Author.Img);
+            imgSrc = String.Format ("data:image/gif;base64,{0}", base64);
+        }
+        <article class="form-group col-md-6">
+            <div class="post">
+                <h2>
+                    <a href="~/Posts/Details/@item.Id" class="label label-default">
+                        @DemoBlog.Classes.Utils.CutText(item.Title, 42)
+                        @*@item.Title*@
+                    </a>
+                </h2>
+                <aside class="col-md-3">
+                    <div class="thumbnail">
+                        <img src=@imgSrc alt="...">
+                    </div>
+                </aside>
+                <div>
+                    Author 
+                    @if (item.Author == null) {
+                        <i>No Author</i>
+                    } else {
+                        <i>@Html.DisplayFor(modelItem => item.Author.FullName)</i>
+                    }
+                </div>
+                <div>
+                    Date <i>@item.Date</i>
+                </div>
+                <p>@MvcHtmlString.Create(DemoBlog.Classes.Utils.CutText(item.Body, 200))</p>
+            </div>
+        </article>
+    }
+</section>
